@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Syed Haider Abbas Rizvi (A Professional Video Editor)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Load React from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@mui/material@5.15.6/umd/material-ui.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.21.3/dist/umd/react-router-dom.development.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Orbitron', sans-serif;
+        background-color: #000000;
+        color: #00ffaa;
+        background-image: 
+          url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50 L0 0 L0 100 Z' fill='%2300ffaa' fill-opacity='0.03'/%3E%3Cpath d='M50 50 L100 0 L100 100 Z' fill='%230088ff' fill-opacity='0.03'/%3E%3C/svg%3E"),
+          radial-gradient(circle at 25% 25%, rgba(0, 255, 170, 0.05) 1%, transparent 15%),
+          radial-gradient(circle at 75% 75%, rgba(0, 136, 255, 0.05) 1%, transparent 15%),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.98));
+        background-size: 300px 300px, 200px 200px, 200px 200px, 100% 100%;
+        background-attachment: fixed;
+        position: relative;
+        overflow-x: hidden;
+      }
+      
+      /* Futuristic grid overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+          linear-gradient(to right, rgba(0, 255, 170, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(0, 136, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+        z-index: -1;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        background: rgba(0, 10, 20, 0.8);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid transparent;
+        border-image: linear-gradient(90deg, transparent, #00ffaa, #0088ff, transparent);
+        border-image-slice: 1;
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        right: 0;
+        z-index: 1000;
+      }
+      .navbar-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+      .navbar-logo {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+        color: #00ff00;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+        letter-spacing: 2px;
+      }
+      .navbar-links {
+        display: flex;
+        gap: 30px;
+      }
+      .navbar-links a {
+        font-family: 'Orbitron', sans-serif;
+        color: #00ffaa;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 14px;
+      }
+      .navbar-links a:hover {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 255, 170, 0.7), 0 0 20px rgba(0, 136, 255, 0.5);
+      }
+      .navbar-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        transition: width 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 255, 170, 0.7);
+      }
+      .navbar-links a:hover::after {
+        width: 100%;
+      }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 20, 0, 0.8) 100%);
+        padding-top: 80px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          linear-gradient(90deg, rgba(0, 255, 0, 0) 0%, rgba(0, 255, 0, 0.03) 50%, rgba(0, 255, 0, 0) 100%),
+          linear-gradient(180deg, rgba(0, 255, 0, 0) 0%, rgba(0, 255, 0, 0.03) 50%, rgba(0, 255, 0, 0) 100%);
+        background-size: 100px 100px;
+        animation: grid-animation 20s linear infinite;
+        z-index: 1;
+      }
+      @keyframes grid-animation {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 100px 100px;
+        }
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 48px;
+        margin-bottom: 20px;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        filter: drop-shadow(0 0 10px rgba(0, 255, 170, 0.5));
+        animation: pulse-text 3s infinite alternate;
+      }
+      
+      @keyframes pulse-text {
+        0% {
+          filter: drop-shadow(0 0 5px rgba(0, 255, 170, 0.5));
+        }
+        100% {
+          filter: drop-shadow(0 0 20px rgba(0, 136, 255, 0.8));
+        }
+      }
+      
+      .hero h1::before, .hero h1::after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        box-shadow: 0 0 10px rgba(0, 255, 170, 0.7), 0 0 20px rgba(0, 136, 255, 0.5);
+      }
+      .hero h1::before {
+        width: 80px;
+        left: -100px;
+        top: 50%;
+        animation: line-pulse 2s infinite alternate;
+      }
+      .hero h1::after {
+        width: 80px;
+        right: -100px;
+        top: 50%;
+        animation: line-pulse 2s infinite alternate-reverse;
+      }
+      
+      @keyframes line-pulse {
+        0% {
+          transform: scaleX(0.8);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scaleX(1.2);
+          opacity: 1;
+        }
+      }
+      .hero p {
+        font-size: 20px;
+        max-width: 800px;
+        margin-bottom: 30px;
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.8;
+        text-shadow: 0 0 5px rgba(0, 255, 170, 0.3), 0 0 10px rgba(0, 136, 255, 0.2);
+        position: relative;
+        padding: 10px 20px;
+        border-left: 2px solid transparent;
+        border-image: linear-gradient(180deg, #00ffaa, #0088ff);
+        border-image-slice: 1;
+        background: rgba(0, 10, 20, 0.3);
+        backdrop-filter: blur(5px);
+        border-radius: 0 10px 10px 0;
+        animation: border-pulse 4s infinite alternate;
+      }
+      
+      @keyframes border-pulse {
+        0% {
+          border-image: linear-gradient(180deg, #00ffaa, #0088ff);
+          border-image-slice: 1;
+        }
+        100% {
+          border-image: linear-gradient(180deg, #0088ff, #00ffaa);
+          border-image-slice: 1;
+        }
+      }
+      .icon {
+        color: #00ff00;
+        font-size: 60px;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+        position: relative;
+      }
+      .icon::after {
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border: 2px solid rgba(0, 255, 0, 0.3);
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 1;
+        }
+        70% {
+          transform: translate(-50%, -50%) scale(1.2);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0.8);
+          opacity: 1;
+        }
+      }
+      .about, .contact, .skills, .reviews {
+        padding: 120px 0 80px;
+        min-height: 100vh;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 10, 20, 0.8) 100%);
+        position: relative;
+        overflow: hidden;
+      }
+      .about::before, .contact::before, .skills::before, .reviews::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          linear-gradient(90deg, rgba(0, 255, 170, 0) 0%, rgba(0, 255, 170, 0.03) 50%, rgba(0, 255, 170, 0) 100%),
+          linear-gradient(180deg, rgba(0, 136, 255, 0) 0%, rgba(0, 136, 255, 0.03) 50%, rgba(0, 136, 255, 0) 100%);
+        background-size: 100px 100px;
+        animation: grid-animation 20s linear infinite;
+        z-index: 1;
+      }
+      
+      /* Futuristic card styling */
+      .futuristic-card {
+        position: relative;
+        border: 1px solid rgba(0, 255, 170, 0.2);
+        background: rgba(0, 10, 20, 0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px rgba(0, 255, 170, 0.1);
+        overflow: hidden;
+        transition: all 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+      }
+      
+      .futuristic-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #00ffaa, transparent, #0088ff, transparent, #00ffaa);
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.5s;
+        animation: glowingBorder 10s linear infinite;
+      }
+      
+      .futuristic-card:hover::before {
+        opacity: 1;
+      }
+      
+      .futuristic-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 255, 170, 0.2);
+      }
+      
+      @keyframes glowingBorder {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      
+      /* Futuristic scanning line effect */
+      .skills::after, .reviews::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 300%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 170, 0.8), rgba(0, 136, 255, 0.8), transparent);
+        animation: scanning-line 8s linear infinite;
+        z-index: 2;
+      }
+      
+      @keyframes scanning-line {
+        0% { top: 0; }
+        50% { top: 100%; }
+        100% { top: 0; }
+      }
+      .section-content {
+        position: relative;
+        z-index: 2;
+      }
+      h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 36px;
+        margin-bottom: 60px;
+        text-align: center;
+        color: #00ffaa;
+        text-shadow: 0 0 15px rgba(0, 255, 170, 0.7), 0 0 30px rgba(0, 136, 255, 0.5);
+        letter-spacing: 5px;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 10px rgba(0, 255, 170, 0.5));
+      }
+      h2::before, h2::after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        width: 80px;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        box-shadow: 0 0 10px rgba(0, 255, 170, 0.7), 0 0 20px rgba(0, 136, 255, 0.5);
+        top: 50%;
+      }
+      h2::before {
+        left: -100px;
+      }
+      h2::after {
+        right: -100px;
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+      }
+      
+      .section-header::before {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #00ffaa, #0088ff, transparent);
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .card {
+        background: rgba(0, 10, 20, 0.3);
+        border: 1px solid rgba(0, 255, 170, 0.3);
+        border-radius: 12px;
+        padding: 30px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      .card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+      }
+      .card:hover::before {
+        animation: shine 1.5s;
+      }
+      @keyframes shine {
+        0% {
+          left: -100%;
+          top: -100%;
+        }
+        100% {
+          left: 100%;
+          top: 100%;
+        }
+      }
+      .card-title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #00ffaa;
+        text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        letter-spacing: 1px;
+        position: relative;
+        display: inline-block;
+      }
+      
+      .futuristic-card .card-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: linear-gradient(90deg, #00ffaa, #0088ff);
+        transition: width 0.5s ease;
+      }
+      
+      .futuristic-card:hover .card-title::after {
+        width: 100%;
+      }
+      
+      .card-content {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        text-shadow: 0 0 5px rgba(0, 136, 255, 0.3);
+      }
+      .card-content a {
+        color: #ccffcc;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      .card-content a:hover {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .glitch-effect {
+        position: relative;
+      }
+      .glitch-effect::before, .glitch-effect::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+      }
+      .glitch-effect::before {
+        color: #0ff;
+        z-index: -1;
+        animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        animation-delay: 0.1s;
+      }
+      .glitch-effect::after {
+        color: #f0f;
+        z-index: -2;
+        animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+        animation-delay: 0.2s;
+      }
+      @keyframes glitch {
+        0% {
+          transform: translate(0);
+        }
+        20% {
+          transform: translate(-3px, 3px);
+        }
+        40% {
+          transform: translate(-3px, -3px);
+        }
+        60% {
+          transform: translate(3px, 3px);
+        }
+        80% {
+          transform: translate(3px, -3px);
+        }
+        100% {
+          transform: translate(0);
+        }
+      }
+      .terminal-text {
+        font-family: monospace;
+        position: relative;
+        display: inline-block;
+      }
+      .terminal-text::after {
+        content: '|';
+        position: absolute;
+        right: -10px;
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 32px;
+        }
+        .hero p {
+          font-size: 16px;
+        }
+        .hero h1::before, .hero h1::after,
+        h2::before, h2::after {
+          width: 30px;
+        }
+        .hero h1::before {
+          left: -40px;
+        }
+        .hero h1::after {
+          right: -40px;
+        }
+        h2::before {
+          left: -40px;
+        }
+        h2::after {
+          right: -40px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Static HTML fallback -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-logo">SH.RIZVI</div>
+          <div class="navbar-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#contact">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      <section id="home" class="hero">
+        <div class="hero-content">
+          <div class="icon">🎬</div>
+          <h1 class="glitch-effect" data-text="Syed Haider Abbas Rizvi">Syed Haider Abbas Rizvi</h1>
+          <p style="font-family: 'Orbitron', sans-serif; color: #00ff00; margin-bottom: 20px; font-size: 24px; text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);">A Professional Video Editor</p>
+          <p class="terminal-text">Transforming ideas into captivating visual stories through innovative video editing and creative storytelling.</p>
+        </div>
+      </section>
+
+      <section id="about" class="about">
+        <div class="container">
+          <div class="section-content">
+            <div class="section-header">
+              <h2>About Me</h2>
+            </div>
+            <div class="grid">
+              <div class="card">
+                <h3 class="card-title">Video Editing</h3>
+                <p class="card-content">Expert in professional video editing with attention to detail and creative transitions. Specializing in futuristic and cyberpunk visual styles.</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Post-Production</h3>
+                <p class="card-content">Skilled in color grading, sound design, and visual effects to enhance video quality. Creating cutting-edge digital experiences.</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Creative Direction</h3>
+                <p class="card-content">Strong ability to transform concepts into engaging visual narratives with a focus on futuristic aesthetics and innovative storytelling.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="about">
+        <div class="container">
+          <div class="section-content">
+            <div class="section-header">
+              <h2>Skills</h2>
+            </div>
+            <div class="grid">
+              <div class="card futuristic-card">
+                <h3 class="card-title">Neural Video Editing</h3>
+                <p class="card-content">AI-Powered Editing, Neural Style Transfer, Automated Scene Detection, Intelligent Content Analysis</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Holographic Motion Design</h3>
+                <p class="card-content">Volumetric Capture, Spatial Computing, AR/VR Integration, Holographic Projections</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Immersive Audio Engineering</h3>
+                <p class="card-content">Spatial Audio, Binaural Recording, Ambisonics, Neural Sound Synthesis</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Quantum Color Science</h3>
+                <p class="card-content">HDR Mastering, Wide Gamut Processing, Spectral Color Grading, Perceptual Color Mapping</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Neuro-Cinematic Techniques</h3>
+                <p class="card-content">Emotion-Driven Editing, Attention Mapping, Cognitive Engagement Optimization, Biometric Response Analysis</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Virtual Production</h3>
+                <p class="card-content">LED Volume Workflows, Real-time Rendering, Digital Humans, Virtual Cinematography</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Blockchain Media Distribution</h3>
+                <p class="card-content">NFT Creation, Decentralized Content Delivery, Smart Contract Licensing, Tokenized Media Assets</p>
+              </div>
+              <div class="card futuristic-card">
+                <h3 class="card-title">Quantum Computing Applications</h3>
+                <p class="card-content">Parallel Timeline Processing, Ultra-Complex Simulations, Quantum Rendering, Advanced Algorithmic Editing</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" class="about">
+        <div class="container">
+          <div class="section-content">
+            <div class="section-header">
+              <h2>Client Reviews</h2>
+            </div>
+            <div class="grid">
+              <div class="card">
+                <h3 class="card-title">John Smith - Marketing Director</h3>
+                <p class="card-content">"Syed's video editing skills transformed our marketing campaign. His attention to detail and creative vision exceeded our expectations. Highly recommended!"</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Sarah Johnson - Content Creator</h3>
+                <p class="card-content">"Working with Syed was a game-changer for my YouTube channel. His editing style is modern, engaging, and perfectly aligned with current trends. My viewership increased by 40% after our collaboration."</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Tech Innovations Inc.</h3>
+                <p class="card-content">"We hired Syed for our product launch video series. His technical expertise and creative approach helped us present complex information in an accessible and visually stunning way."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <div class="container">
+          <div class="section-content">
+            <div class="section-header">
+              <h2>Contact Me</h2>
+            </div>
+            <div class="grid">
+              <div class="card">
+                <h3 class="card-title">Email</h3>
+                <p class="card-content"><a href="mailto:rpold325@gmail.com">rpold325@gmail.com</a></p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Phone</h3>
+                <p class="card-content"><a href="tel:+923434470705">+92 343 4470705</a></p>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Location</h3>
+                <p class="card-content">Lahore, Pakistan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      // Add smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      // Add animation to elements
+      document.addEventListener('DOMContentLoaded', function() {
+        const hero = document.querySelector('.hero-content');
+        const heroElements = hero.querySelectorAll('h1, p, .icon');
+        
+        heroElements.forEach((element, index) => {
+          element.style.opacity = '0';
+          element.style.transform = 'translateY(20px)';
+          element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          
+          setTimeout(() => {
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+          }, 300 * (index + 1));
+        });
+
+        // Matrix-like background effect
+        const createMatrixBackground = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          canvas.style.position = 'fixed';
+          canvas.style.top = '0';
+          canvas.style.left = '0';
+          canvas.style.zIndex = '0';
+          canvas.style.opacity = '0.1';
+          document.body.appendChild(canvas);
+
+          const ctx = canvas.getContext('2d');
+          const characters = '01';
+          const fontSize = 10;
+          const columns = canvas.width / fontSize;
+          const drops = [];
+
+          for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+          }
+
+          function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+              const text = characters.charAt(Math.floor(Math.random() * characters.length));
+              ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+              if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+              }
+              drops[i]++;
+            }
+          }
+
+          setInterval(draw, 33);
+        };
+
+        createMatrixBackground();
+      });
+    </script>
+  </body>
+</html>
